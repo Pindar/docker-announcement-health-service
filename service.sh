@@ -15,6 +15,8 @@ TTL=$((THRESHOLD*TIMEOUT))
 
 echo "[announce-health] Start announce service for $SERVICE";
 
+trap "exit" SIGHUP SIGINT SIGTERM
+
 i=0;
 while true; do
 
