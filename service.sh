@@ -15,7 +15,16 @@ TTL=$((THRESHOLD*TIMEOUT))
 
 echo "[announce-health] Start announce service for $SERVICE";
 
-trap "exit" SIGHUP SIGINT SIGTERM
+
+function clean_up
+{
+  etcdctl --peers $ETCD rm /announce/services/ingress/$ENVIRONMENT/$NUMBER --recursive
+  etcdctl --peers $ETCD rm /health/services/$SERVICE/$ENVIRONMENT/$NUMBER
+  exit;
+}
+
+
+trap "clean_up" SIGHUP SIGINT SIGTERM
 
 i=0;
 while true; do
@@ -42,6 +51,3 @@ while true; do
   i=$((i+1));
 	sleep $TIMEOUT;
 done
-
-etcdctl --peers $ETCD rm /announce/services/ingress/$ENVIRONMENT/$NUMBER --recursive
-etcdctl --peers $ETCD rm /health/services/$SERVICE/$ENVIRONMENT/$NUMBER
