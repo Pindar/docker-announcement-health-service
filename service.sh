@@ -18,7 +18,7 @@ echo "[announce-health] Start announce service for $SERVICE";
 
 function clean_up
 {
-  etcdctl --peers $ETCD rm /announce/services/ingress/$ENVIRONMENT/$NUMBER --recursive
+  etcdctl --peers $ETCD rm /announce/services/$SERVICE/$ENVIRONMENT/$NUMBER --recursive
   etcdctl --peers $ETCD rm /health/services/$SERVICE/$ENVIRONMENT/$NUMBER
   exit;
 }
