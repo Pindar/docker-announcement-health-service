@@ -24,7 +24,7 @@ function clean_up
 }
 
 
-trap "clean_up" SIGHUP SIGINT SIGTERM
+trap clean_up SIGHUP SIGINT SIGTERM
 
 i=0;
 while true; do
@@ -35,7 +35,7 @@ while true; do
 
   echo "[announce-health] check";
 
-  if [[ `curl --silent --max-time 60 $HEALTH_URL -D - -O | grep "200 OK"` ]]; then
+  if [[ `curl -f --silent --max-time 60 $HEALTH_URL -D - | grep "200 OK"` ]]; then
       echo "[announce-health] Service $SERVICE success";
       etcdctl --peers $ETCD set /announce/services/$SERVICE/$ENVIRONMENT/$NUMBER "$ANNOUNCE_VALUE" --ttl $TTL;
       etcdctl --peers $ETCD set /health/services/$SERVICE/$ENVIRONMENT/$NUMBER OK --ttl $TTL;
