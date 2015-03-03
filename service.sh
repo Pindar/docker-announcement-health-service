@@ -37,7 +37,7 @@ while true; do
 
   if [[ `curl -f --silent --max-time 60 $HEALTH_URL -D - | grep "200 OK"` ]]; then
       echo "[announce-health] Service $SERVICE success";
-      etcdctl --peers $ETCD set /announce/services/$SERVICE/$ENVIRONMENT/$NUMBER "$ANNOUNCE_VALUE" --ttl $TTL;
+      echo "$ANNOUNCE_VALUE" | etcdctl --peers $ETCD set /announce/services/$SERVICE/$ENVIRONMENT/$NUMBER --ttl $TTL;
       etcdctl --peers $ETCD set /health/services/$SERVICE/$ENVIRONMENT/$NUMBER OK --ttl $TTL;
     else
       failure+=1
